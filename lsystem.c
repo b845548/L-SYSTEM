@@ -1,9 +1,60 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
-#include"head.h"
+#include"lsystem.h"
+#include <GL4D/gl4dg.h>
+#include <GL4D/gl4duw_SDL2.h>
 
-static void recursive(lSystem * ls,int it_actuel){
+void lsystem_interpreter(lSystem * ls,GLuint object){
+	int len=strlen(ls->resultat),i;
+				int j;
+				char buf[20];
+ 				GLfloat facteur;
+	for(i=0;i<len;i++)
+		switch(ls->resultat[i]){
+			case 'F': 
+ 				gl4duTranslatef(0, ls->pas*0.3, 0);
+				// tracer avec ligne				
+				gl4duPushMatrix();// push
+ 				gl4duScalef(0.3, ls->pas*0.3, 0.3);// proportion petite
+ 			    gl4duSendMatrices();
+				gl4dgDraw(object);
+				gl4duPopMatrix();// pop
+				// tracer 
+			break;
+			case 'f': 	
+ 				gl4duTranslatef(0, ls->pas*0.3, 0);// tracer sans ligne	
+			break;
+			case '@': 	
+				i++;
+				for(j=0;strchr("1234567890.",ls->resultat[i])!=NULL;j++,i++)
+				buf[j]=ls->resultat[i];
+				facteur=atof(buf);
+ 				gl4duScalef(facteur,facteur,facteur);// proportion petite
+				
+				//printf("%f ",facteur);
+				break;
+			case '+': // tourner vers +Z		
+				gl4duRotatef(ls->angle,0,0, 1);// rotation 
+			break;
+			case '-': // tourner vers -Z		
+				gl4duRotatef(-ls->angle,0,0, 1);// rotation 
+			break;
+			case '[': // sauver matrix
+				gl4duPushMatrix();// push
+			break;
+			case ']': // restaurer matrix
+				gl4duPopMatrix();// pop
+			break;
+
+			default :
+				break;
+
+		}
+
+}
+
+static void lsystem_recursive(lSystem * ls,int it_actuel){
 int i,j,len=strlen(ls->resultat);
 int k,it,new_len;
 char * nv;
@@ -42,13 +93,13 @@ nv[it]='\0';
 
 free(ls->resultat);
 ls->resultat=nv;
-recursive(ls,1+it_actuel);
+lsystem_recursive(ls,1+it_actuel);
 }
 
 
 
 
-lSystem parsing_lsystem(char * path){
+lSystem lsystem_parsing(char * path){
 lSystem ls;
 FILE * f;
 char * pch;
@@ -177,7 +228,7 @@ while(NULL!=fgets(buf,100,f)){
 		    printf ("iteration : %d",ls.it_max);
 	ls.resultat=(char *)malloc(strlen(ls.axiom)*sizeof(char));
 	strcpy(ls.resultat,ls.axiom);
-	recursive(&ls,0);
+	lsystem_recursive(&ls,0);
  return ls;
 
 }

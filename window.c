@@ -9,10 +9,12 @@
 #include <math.h>
 #include <GL4D/gl4dg.h>
 #include <GL4D/gl4duw_SDL2.h>
-#include"head.h"
+#include"lsystem.h"
 
 //extern lSystem init_lSystem();
-extern lSystem parsing_lsystem(char * path);
+extern lSystem lsystem_parsing(char * path);
+extern void lsystem_interpreter(lSystem * ls,GLuint object);
+
 lSystem ls;
 static void quit(void);
 
@@ -166,7 +168,7 @@ static void initData(void) {
 
 
 
-ls=parsing_lsystem("test.lsys");
+ls=lsystem_parsing("test.lsys");
 printf("%s",ls.resultat);
 
 
@@ -326,54 +328,6 @@ void unObjet(GLfloat x, GLfloat z) {
 }
 
 /*!\brief function called by GL4Dummies' loop at draw.*/
-void interpreter(lSystem * ls){
-int len=strlen(ls->resultat),i;
-				int j;
-				char buf[20];
- 				GLfloat facteur;
-	for(i=0;i<len;i++)
-		switch(ls->resultat[i]){
-			case 'F': 
- 				gl4duTranslatef(0, ls->pas*0.3, 0);
-				// tracer avec ligne				
-				gl4duPushMatrix();// push
- 				gl4duScalef(0.3, ls->pas*0.3, 0.3);// proportion petite
- 			    gl4duSendMatrices();
-				gl4dgDraw(_sphere);
-				gl4duPopMatrix();// pop
-				// tracer 
-			break;
-			case 'f': 	
- 				gl4duTranslatef(0, ls->pas*0.3, 0);// tracer sans ligne	
-			break;
-			case '@': 	
-				i++;
-				for(j=0;strchr("1234567890.",ls->resultat[i])!=NULL;j++,i++)
-				buf[j]=ls->resultat[i];
-				facteur=atof(buf);
- 				gl4duScalef(facteur,facteur,facteur);// proportion petite
-				
-				//printf("%f ",facteur);
-				break;
-			case '+': // tourner vers +Z		
-				gl4duRotatef(ls->angle,0,0, 1);// rotation 
-			break;
-			case '-': // tourner vers -Z		
-				gl4duRotatef(-ls->angle,0,0, 1);// rotation 
-			break;
-			case '[': // sauver matrix
-				gl4duPushMatrix();// push
-			break;
-			case ']': // restaurer matrix
-				gl4duPopMatrix();// pop
-			break;
-
-			default :
-				break;
-
-		}
-
-}
 
 
 static void draw(void) {
@@ -489,7 +443,7 @@ static void draw(void) {
 gl4duPushMatrix();
 gl4duTranslatef(0,0,-10);
 glBindTexture(GL_TEXTURE_2D, _skyTexId);  
-interpreter(&ls);
+lsystem_interpreter(&ls,_sphere);
 gl4duPopMatrix();
 }
 
