@@ -1,11 +1,11 @@
 # format : l-system
 # auteur : hobean bae
 arbre {
-	variables : F , f
-	axiom : Ff
-	rules : F = @0.8FFF++ , f = fff++
-	iteration : 5
-	angle : 25.0
+	variables : a , b , g , x , y , F 
+	axiom : @0.85+a
+	rules : a = +g[+x]gb , b = --F[-y]Fa , g = \\\F+g , x = a , y = b , F = @0.989F/
+	iteration : 8
+	angle : 10.0
 	distance : 5.0
 }
 
