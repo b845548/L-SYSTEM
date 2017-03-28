@@ -6,10 +6,9 @@
 #include <GL4D/gl4duw_SDL2.h>
 
 void lsystem_interpreter(lSystem * ls,GLuint object){
-	int len=strlen(ls->resultat),i;
-				int j;
-				char buf[20];
- 				GLfloat facteur;
+	int len=strlen(ls->resultat),i,j;
+	char buf[20];
+	GLfloat facteur;
 	for(i=0;i<len;i++)
 		switch(ls->resultat[i]){
 			case 'F': 

@@ -121,7 +121,7 @@ static void initGL(void) {
  */
 static void initData(void) {
   /* the checkboard texture */
-  GLuint check[] = {-1, 255 << 24, 128 << 24, -1};
+  GLuint check[] = {0xffa4f460 ,0xffa52a2a ,0xffa52a2a ,0xffa52a2a };
   /* a red-white texture used to draw a compass */
   GLuint northsouth[] = {(255 << 24) + 255, -1};
   /* a fractal texture generated usind a midpoint displacement algorithm */
