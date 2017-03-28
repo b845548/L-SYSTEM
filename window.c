@@ -442,6 +442,7 @@ static void draw(void) {
 //  unObjet(3, -10);
 gl4duPushMatrix();
 gl4duTranslatef(0,0,-10);
+gl4duScalef(0.3, 0.3, 0.3);// proportion petite
 glBindTexture(GL_TEXTURE_2D, _skyTexId);  
 lsystem_interpreter(&ls,_sphere);
 gl4duPopMatrix();

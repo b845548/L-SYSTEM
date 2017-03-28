@@ -12,17 +12,19 @@ void lsystem_interpreter(lSystem * ls,GLuint object){
 	for(i=0;i<len;i++)
 		switch(ls->resultat[i]){
 			case 'F': 
- 				gl4duTranslatef(0, ls->pas*0.3, 0);
+ 				gl4duTranslatef(0, ls->pas*2, 0);
 				// tracer avec ligne				
+// 				gl4duTranslatef(0, ls->pas, 0);
 				gl4duPushMatrix();// push
- 				gl4duScalef(0.3, ls->pas*0.3, 0.3);// proportion petite
+  				gl4duTranslatef(0, -ls->pas, 0);
+				gl4duScalef(1, ls->pas,1);// proportion petite
  			    gl4duSendMatrices();
 				gl4dgDraw(object);
 				gl4duPopMatrix();// pop
 				// tracer 
 			break;
 			case 'f': 	
- 				gl4duTranslatef(0, ls->pas*0.3, 0);// tracer sans ligne	
+ 				gl4duTranslatef(0, ls->pas*2, 0);// tracer sans ligne	
 			break;
 			case '@': 	
 				i++;
@@ -38,6 +40,12 @@ void lsystem_interpreter(lSystem * ls,GLuint object){
 			break;
 			case '-': // tourner vers -Z		
 				gl4duRotatef(-ls->angle,0,0, 1);// rotation 
+			break;
+			case '/': // tourner vers +y		
+				gl4duRotatef(ls->angle,0,1,0);// rotation 
+			break;
+			case '\\': // tourner vers -y		
+				gl4duRotatef(-ls->angle,0,1,0);// rotation 
 			break;
 			case '[': // sauver matrix
 				gl4duPushMatrix();// push
@@ -161,7 +169,7 @@ while(NULL!=fgets(buf,100,f)){
 					if(source_char==ls.rules_source[i]){			 
 						ls.rules_replace[i]=malloc(sizeof(char)*strlen(pch));
 						strcpy(ls.rules_replace[i],pch);
-						ls.rules_replace[i][strlen(pch)-1]='\0';
+						ls.rules_replace[i][strlen(pch)]='\0';
 						
 						ls.nb_rules++;
 						break;				
